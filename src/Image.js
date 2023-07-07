@@ -2,6 +2,8 @@
 
 function render(two)
 {
+    console.log("rendering");
+    
     //this generates a random point on a given side of the box
     function pickRandomSidePos(side)
     {
