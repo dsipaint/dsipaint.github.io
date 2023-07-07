@@ -1,14 +1,14 @@
 import './App.css';
 import { useState } from "react";
 import Two from "two.js";
-import render from './Image.js';
+import renderRandomStraightLines from './Renderer.js';
 import $ from "jquery"
 
 
 function App() {
 
   //start with the default settings
-  var defaultsettings = {
+  const defaultsettings = {
     number: 1
   }
 
@@ -32,15 +32,15 @@ function App() {
 
     //then draw in each box
     var boxes = document.getElementsByClassName("box");
-    for(var i = 0; i < boxes.length; i++)
+    for(i = 0; i < boxes.length; i++)
     {
       var params = {
         fitted: true,
-        type: Two.Types.canvas
+        type: Two.Types.canvas //draw as a two.js canvas so we can easily export the result
       }
       var two = new Two(params);
       two.appendTo(boxes[i]);
-      render(two);
+      renderRandomStraightLines(two);
       two.update();
     }
   }

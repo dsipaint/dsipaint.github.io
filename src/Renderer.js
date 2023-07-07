@@ -1,6 +1,9 @@
 //this code represents an image generated in a box by two.js
 
-function render(two)
+
+//this generates 2 points, representing a randomly generated line between 2 sides
+//this only returns the ends of the line, so you are free to draw the line however you want
+function randomLineBetweenTwoSides(two)
 {
     //this generates a random point on a given side of the box
     function pickRandomSidePos(side)
@@ -25,12 +28,6 @@ function render(two)
         }
     }
 
-    //make multiple lines
-    var maxlines = 10;
-    var minlines = 5;
-    var randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
-    for(var j = 0; j < randlines; j++)
-    {
         //get 2 different random numbers
         var rand1 = Math.floor(Math.random()*4);
         var rand2 = Math.floor(Math.random()*4);
@@ -39,9 +36,20 @@ function render(two)
 
         var coords1 = pickRandomSidePos(rand1);
         var coords2 = pickRandomSidePos(rand2);
+        return [coords1[0], coords1[1], coords2[0], coords2[1]];
+}
 
-        var line = two.makeLine(coords1[0], coords1[1], coords2[0], coords2[1]);
+function renderRandomStraightLines(two)
+{
+    //make multiple lines
+    const maxlines = 10;
+    const minlines = 5;
+    var randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
+    for(var j = 0; j < randlines; j++)
+    {
+        var coords = randomLineBetweenTwoSides(two);
+        var line = two.makeLine(coords[0], coords[1], coords[2], coords[3]);
     }
 }
 
-export default render;
+export default renderRandomStraightLines;
