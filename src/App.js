@@ -26,17 +26,17 @@ function App() {
   //when the button is pushed, we want to draw our boxes
   const generateImages = function () {
     //add the right number of boxes to draw to
-    $("#boxcontainer").empty();
+    $("#boxcontainer").empty(); //(remove old boxes)
     for(var i = 0; i < settings.number; i++)
       $("#boxcontainer").append("<div id=\"box-" + i + "\" class=\"box\"></div>");
 
     //then draw in each box
-
     var boxes = document.getElementsByClassName("box");
     for(var i = 0; i < boxes.length; i++)
     {
       var params = {
-        fitted: true
+        fitted: true,
+        type: Two.Types.canvas
       }
       var two = new Two(params);
       two.appendTo(boxes[i]);
