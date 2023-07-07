@@ -1,40 +1,37 @@
 import './App.css';
-import Image from './Image.js';
-import { useState } from "react";
+import { useState } from "react"
 
 function App() {
-  //we store the user settings here before we apply them with the button
-  const [userunAppliedSettings, setUserUnappliedSettings] = useState({
-    images: 10
-  });
 
-  //update the number of images stored in the unapplied settings
-  const usrNumImageChange = function(event) {
-    setUserUnappliedSettings({
-      ...userunAppliedSettings,
-      images: event.target.value
-    });
+  var defaultsettings = {
+    number: 1
   }
 
-  //this is the user's actual applied settings
-  const [usersettings, updateUserSettings] = useState({
-    images: 1 //default images set as 10
-  });
+  const [settings, setSettings] = useState(defaultsettings);
+  const [presettings, setPreSettings] = useState(defaultsettings);
 
-  //this is called when the button is pressed to update the user's actual settings
-  const updateSettingsHandle = function(event) {
-    updateUserSettings({...userunAppliedSettings});
+  const saveUserNumber = function (event) {
+    setPreSettings({
+      ...presettings,
+      number: event.target.value
+    })
   }
 
-  var images = []
-  for(var i = 0; i < usersettings.images; i++)
-    images.push(<Image />)
+  const generateImages = function () {
+    setSettings({
+      ...presettings
+    })
+  };
+
+  var divs = [];
+  for(var i = 0; i < settings.number; i++)
+    divs.push(<div className="box"></div>);
 
   return (
     <div>
-      <input type="number" defaultValue="1" onChange={usrNumImageChange}></input>
-      <button onClick={updateSettingsHandle}>Generate images</button>
-      {images}
+      <input type="number" defaultValue={defaultsettings.number} onChange={saveUserNumber}></input>
+      <button onClick={generateImages}>Generate Images</button>
+      {divs}
     </div>
   );
 }
