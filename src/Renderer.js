@@ -68,9 +68,10 @@ function renderRandomCurves(two)
           ];
           
         points.forEach(p => p.relative = false);
-        let bezierPath = new Two.Path(points);
+        //don't ask me what difference "the tricks" make, they just do
+        let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
         two.add(bezierPath);
-        bezierPath.automatic = false;
+        bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
         bezierPath.fill = 'none';   
     }
 }
