@@ -76,7 +76,39 @@ function renderRandomCurves(two)
     }
 }
 
+function renderRandomLinesAndCurves(two)
+{
+    const maxlines = 10;
+    const minlines = 5;
+    const randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
+    for(var j = 0; j < randlines; j++)
+    {
+        var coords = randomLineBetweenTwoSides(two);
+
+        // 50/50 chance to be a bezier curve or a straight line
+        if(Math.random() < 0.5)
+        {
+            let points = [
+                new Two.Anchor(coords[0], coords[1], null, null, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
+                new Two.Anchor(coords[2], coords[3], 400, 500, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
+              ];
+              
+            points.forEach(p => p.relative = false);
+            //don't ask me what difference "the tricks" make, they just do
+            let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
+            two.add(bezierPath);
+            bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
+            bezierPath.fill = 'none';  
+        } 
+        else
+        {
+            var line = two.makeLine(coords[0], coords[1], coords[2], coords[3]);
+        }
+    }
+}
+
 export default {
     renderRandomStraightLines,
-    renderRandomCurves
+    renderRandomCurves,
+    renderRandomLinesAndCurves
 };
