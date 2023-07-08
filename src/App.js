@@ -1,8 +1,8 @@
 import './App.css';
 import { useState } from "react";
 import Two from "two.js";
-import renderRandomStraightLines from './Renderer.js';
-import $ from "jquery"
+import Renderer from './Renderer.js';
+import $ from "jquery";
 
 
 function App() {
@@ -40,7 +40,8 @@ function App() {
       }
       var two = new Two(params);
       two.appendTo(boxes[i]);
-      renderRandomStraightLines(two);
+      // renderRandomStraightLines(two);
+      Renderer.renderRandomCurves(two);
       two.update();
     }
   }

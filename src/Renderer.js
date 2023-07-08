@@ -1,3 +1,5 @@
+import Two from "two.js";
+
 //this code represents an image generated in a box by two.js
 
 
@@ -44,12 +46,36 @@ function renderRandomStraightLines(two)
     //make multiple lines
     const maxlines = 10;
     const minlines = 5;
-    var randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
-    for(var j = 0; j < randlines; j++)
+    const randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
+    for(var i = 0; i < randlines; i++)
     {
         var coords = randomLineBetweenTwoSides(two);
         var line = two.makeLine(coords[0], coords[1], coords[2], coords[3]);
     }
 }
 
-export default renderRandomStraightLines;
+function renderRandomCurves(two)
+{
+    const maxlines = 10;
+    const minlines = 5;
+    const randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
+    for(var j = 0; j < randlines; j++)
+    {
+        var coords = randomLineBetweenTwoSides(two);
+        let points = [
+            new Two.Anchor(coords[0], coords[1], null, null, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
+            new Two.Anchor(coords[2], coords[3], 400, 500, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
+          ];
+          
+        points.forEach(p => p.relative = false);
+        let bezierPath = new Two.Path(points);
+        two.add(bezierPath);
+        bezierPath.automatic = false;
+        bezierPath.fill = 'none';   
+    }
+}
+
+export default {
+    renderRandomStraightLines,
+    renderRandomCurves
+};
