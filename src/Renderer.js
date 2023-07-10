@@ -107,8 +107,55 @@ function renderRandomLinesAndCurves(two)
     }
 }
 
+function renderStripes(two)
+{
+    const maxgradient = 10;
+    const gradient = -maxgradient + Math.floor(Math.random()*(maxgradient*2 + 1));
+
+    const maxspacing = 50;
+    const minspacing = 100;
+    const spacing = minspacing + Math.floor(Math.random()*(maxspacing + 1 - minspacing));
+    //ignore offset for now
+
+    //iterate upwards until we reach the top
+    var n = 0;
+    while(n*spacing <= two.height)
+    {
+        two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+        n++;
+    }
+
+    if(gradient >= 0)
+    {
+        //then iterate downwards until the intersection reaches the bottom
+        n = -1;
+        while((gradient*two.width) + (n*spacing) > 0)
+        {
+            two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+            n--;
+        }
+    }
+    else
+    {
+        //keep iterating up until the opposite side intersections hit the top
+        while((gradient*two.width) + (n*spacing) <= two.width)
+        {
+            two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+            n++;
+        }
+    }
+}
+
+function renderCrissCross(two)
+{
+    renderStripes(two);
+    renderStripes(two);
+}
+
 export default {
     renderRandomStraightLines,
     renderRandomCurves,
-    renderRandomLinesAndCurves
+    renderRandomLinesAndCurves,
+    renderStripes, 
+    renderCrissCross
 };

@@ -41,7 +41,7 @@ function App() {
       var two = new Two(params);
       two.appendTo(boxes[i]);
       // renderRandomStraightLines(two);
-      Renderer.renderRandomLinesAndCurves(two);
+      Renderer.renderCrissCross(two);
       two.update();
     }
   }

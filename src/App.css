@@ -2,6 +2,7 @@
   border: 2px solid red;
   width: 500px;
   height: 500px;
+  float: left;
 }
 
 input[type="number"] {
