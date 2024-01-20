@@ -35,13 +35,20 @@ function App() {
     for(i = 0; i < boxes.length; i++)
     {
       var params = {
-        fitted: true,
+        width: 500,
+        height: 500,
         type: Two.Types.canvas //draw as a two.js canvas so we can easily export the result
       }
       var two = new Two(params);
       two.appendTo(boxes[i]);
-      // renderRandomStraightLines(two);
-      Renderer.renderCrissCross(two);
+      Renderer.background(two);
+      
+      // Renderer.renderCrissCross(two);
+      // Renderer.renderRandomCurves(two);
+      // Renderer.renderRandomLinesAndCurves(two);
+      // Renderer.renderRandomStraightLines(two);
+      Renderer.renderStripes(two);
+
       two.update();
     }
   }

@@ -3,6 +3,12 @@ import Two from "two.js";
 //this code represents an image generated in a box by two.js
 
 
+function background(two)
+{
+    var background = two.makeRectangle(0, 0, 10000, 10000);
+    background.fill = 'white'
+}
+
 //this generates 2 points, representing a randomly generated line between 2 sides
 //this only returns the ends of the line, so you are free to draw the line however you want
 function randomLineBetweenTwoSides(two)
@@ -153,6 +159,7 @@ function renderCrissCross(two)
 }
 
 export default {
+    background,
     renderRandomStraightLines,
     renderRandomCurves,
     renderRandomLinesAndCurves,
