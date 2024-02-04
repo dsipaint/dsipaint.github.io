@@ -47,7 +47,8 @@ function App() {
       // Renderer.renderRandomCurves(two);
       // Renderer.renderRandomLinesAndCurves(two);
       // Renderer.renderRandomStraightLines(two);
-      Renderer.renderStripes(two);
+      // Renderer.renderStripes(two);
+      Renderer.renderCurveStripes(two);
 
       two.update();
     }

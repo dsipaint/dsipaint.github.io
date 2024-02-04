@@ -69,8 +69,8 @@ function renderRandomCurves(two)
     {
         var coords = randomLineBetweenTwoSides(two);
         let points = [
-            new Two.Anchor(coords[0], coords[1], null, null, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
-            new Two.Anchor(coords[2], coords[3], 400, 500, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
+            new Two.Anchor(coords[0], coords[1], Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
+            new Two.Anchor(coords[2], coords[3], Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
           ];
           
         points.forEach(p => p.relative = false);
@@ -95,8 +95,8 @@ function renderRandomLinesAndCurves(two)
         if(Math.random() < 0.5)
         {
             let points = [
-                new Two.Anchor(coords[0], coords[1], null, null, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
-                new Two.Anchor(coords[2], coords[3], 400, 500, Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
+                new Two.Anchor(coords[0], coords[1], Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.move),
+                new Two.Anchor(coords[2], coords[3], Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height), Two.Commands.curve)
               ];
               
             points.forEach(p => p.relative = false);
@@ -158,11 +158,67 @@ function renderCrissCross(two)
     renderStripes(two);
 }
 
+function renderCurveStripes(two)
+{
+    //determines which way round the curves spawn, horizontal or vertical
+    var use_y = Math.random() < 0.5;
+    var bound = use_y ? two.height : two.width;
+
+    //spacing between lines
+    let minspacing = 20;
+    let maxspacing = 21;
+    var spacing = minspacing + Math.floor(Math.random()*maxspacing);
+
+    //without lines either side, because the lines curve, there are large gaps of space where you would imagine offscreen curves should curve into
+    let lineseitherside = 10;
+
+    var pointset1 = [];
+    for(var i = -(spacing*lineseitherside); i <= bound + (spacing*lineseitherside); i+=spacing)
+        pointset1.push(-(spacing*lineseitherside) + i);
+
+
+    var pointset2 = [];
+    for(var i = -(spacing*lineseitherside); i <= bound + (spacing*lineseitherside); i+=spacing)
+        pointset2.push(-(spacing*lineseitherside) + i);
+
+    console.log(pointset1);
+
+    //draw points as curves
+    var lefthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
+    var righthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
+    for(var i = 1; i < pointset1.length; i++)
+    {
+        var points = []
+        if(use_y)
+        {
+            points = [
+                new Two.Anchor(pointset1[i], 0, lefthandle[0] + (i*spacing), lefthandle[1] + (i*spacing), righthandle[0], righthandle[1], Two.Commands.move),
+                new Two.Anchor(pointset2[i], two.height, lefthandle[0] + (i*spacing), lefthandle[1] + (i*spacing), righthandle[0], righthandle[1], Two.Commands.curve)
+              ];
+        }
+        else
+        {
+            points = [
+                new Two.Anchor(0, pointset1[i], lefthandle[0] + (i*spacing), lefthandle[1] + (i*spacing), righthandle[0], righthandle[1], Two.Commands.move),
+                new Two.Anchor(two.width, pointset2[i], lefthandle[0] + (i*spacing), lefthandle[1] + (i*spacing), righthandle[0], righthandle[1], Two.Commands.curve)
+              ];
+        }
+
+        points.forEach(p => p.relative = false);
+        //don't ask me what difference "the tricks" make, they just do
+        let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
+        two.add(bezierPath);
+        bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
+        bezierPath.fill = 'none';  
+    }
+}
+
 export default {
     background,
     renderRandomStraightLines,
     renderRandomCurves,
     renderRandomLinesAndCurves,
     renderStripes, 
-    renderCrissCross
+    renderCrissCross,
+    renderCurveStripes
 };
