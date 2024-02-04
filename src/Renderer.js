@@ -166,7 +166,7 @@ function renderCurveStripes(two)
 
     //spacing between lines
     let minspacing = 20;
-    let maxspacing = 21;
+    let maxspacing = 100;
     var spacing = minspacing + Math.floor(Math.random()*maxspacing);
 
     //without lines either side, because the lines curve, there are large gaps of space where you would imagine offscreen curves should curve into

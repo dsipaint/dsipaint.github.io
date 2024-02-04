@@ -35,8 +35,8 @@ function App() {
     for(i = 0; i < boxes.length; i++)
     {
       var params = {
-        width: 500,
-        height: 500,
+        width: 796.8, //hard-coded from app.css, the number of pixels to match the measurements of a4 paper
+        height: 1123.2,
         type: Two.Types.canvas //draw as a two.js canvas so we can easily export the result
       }
       var two = new Two(params);
