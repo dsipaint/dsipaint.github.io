@@ -183,9 +183,11 @@ function renderCurveStripes(two)
 
     console.log(pointset1);
 
-    //draw points as curves
+    //TODO for now, handles are generated randomly once, and then position changed relative to the line it's associated with. We can mess around with this parameter to get different curves though.
     var lefthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
     var righthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
+
+    //draw points as curves
     for(var i = 1; i < pointset1.length; i++)
     {
         var points = []

@@ -8,3 +8,7 @@
 input[type="number"] {
   width: 30px;
 }
+
+#menu {
+  margin-bottom: 20px;
+}

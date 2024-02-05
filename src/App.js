@@ -9,7 +9,18 @@ function App() {
 
   //start with the default settings
   const defaultsettings = {
-    number: 1
+    number: 1,
+    type: "Stripes"
+  }
+
+  //when you want to add more rendering options, add the name and the method here :)
+  const renderingoptions = {
+    stripes: Renderer.renderStripes,
+    random_straight_lines: Renderer.renderRandomStraightLines,
+    curve_stripes: Renderer.renderCurveStripes,
+    random_curves: Renderer.renderRandomCurves,
+    random_lines_and_curves: Renderer.renderRandomLinesAndCurves,
+    crisscross: Renderer.renderCrissCross
   }
 
   //initialise the settings
@@ -21,6 +32,14 @@ function App() {
       ...settings,
       number: event.target.value
     })
+  }
+
+  //whenever type of image is changed, remember this in the settings
+  const saveUserType = function (event) {
+    setSettings({
+      ...settings,
+      type: event.target.value
+    });
   }
 
   //when the button is pushed, we want to draw our boxes
@@ -42,13 +61,8 @@ function App() {
       var two = new Two(params);
       two.appendTo(boxes[i]);
       Renderer.background(two);
-      
-      // Renderer.renderCrissCross(two);
-      // Renderer.renderRandomCurves(two);
-      // Renderer.renderRandomLinesAndCurves(two);
-      // Renderer.renderRandomStraightLines(two);
-      // Renderer.renderStripes(two);
-      Renderer.renderCurveStripes(two);
+
+      renderingoptions[settings.type.toLowerCase().replaceAll(" ", "_")](two);
 
       two.update();
     }
@@ -56,8 +70,17 @@ function App() {
 
   return (
     <div>
-      <input type="number" defaultValue={defaultsettings.number} onChange={saveUserNumber}></input>
-      <button onClick={generateImages}>Generate Images</button>
+      <div id="menu">
+        <input type="number" defaultValue={defaultsettings.number} onChange={saveUserNumber}></input>
+        <select id="selectType"onChange={saveUserType}>
+          {
+            Object.keys(renderingoptions).map(key => (
+              <option>{key.replaceAll("_", " ")}</option>
+            ))
+          }
+        </select>
+        <button onClick={generateImages}>Generate Images</button>
+      </div>
       <div id="boxcontainer"></div>
     </div>
   );
