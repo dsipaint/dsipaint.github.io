@@ -2,7 +2,8 @@ import './App.css';
 import { useState } from "react";
 import Two from "two.js";
 import Renderer from './Renderer.js';
-import $ from "jquery";
+import ReactDOMServer from 'react-dom/server';
+import $ from 'jquery';
 
 
 function App() {
@@ -44,10 +45,12 @@ function App() {
 
   //when the button is pushed, we want to draw our boxes
   const generateImages = function () {
+    //remove old boxes
+    $(".box").remove();
+
     //add the right number of boxes to draw to
-    $("#boxcontainer").empty(); //(remove old boxes)
     for(var i = 0; i < settings.number; i++)
-      $("#boxcontainer").append("<div id=\"box-" + i + "\" class=\"box\"></div>");
+      $("#menu").after(ReactDOMServer.renderToStaticMarkup(<div id={"box" + i} class="box"></div>));
 
     //then draw in each box
     var boxes = document.getElementsByClassName("box");
@@ -81,7 +84,6 @@ function App() {
         </select>
         <button onClick={generateImages}>Generate Images</button>
       </div>
-      <div id="boxcontainer"></div>
     </div>
   );
 }
