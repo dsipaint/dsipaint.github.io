@@ -254,8 +254,6 @@ function getCurveStripes(two)
     for(var i = -(spacing*lineseitherside); i <= bound + (spacing*lineseitherside); i+=spacing)
         pointset2.push(-(spacing*lineseitherside) + i);
 
-    console.log(pointset1);
-
     //TODO for now, handles are generated randomly once, and then position changed relative to the line it's associated with. We can mess around with this parameter to get different curves though.
     var lefthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
     var righthandle = [Math.floor(Math.random()*two.width), Math.floor(Math.random()*two.height)]
