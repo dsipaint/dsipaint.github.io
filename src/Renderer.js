@@ -9,6 +9,29 @@ function background(two)
     background.fill = 'white'
 }
 
+function animateLines(two, lines)
+{
+    for(var i = 0; i < lines.length; i++)
+    {
+        var path = lines[i];
+        two.add(path);
+        
+        path.beginning = 1; 
+    }
+
+    two.update();
+    two.bind('update', function(framecount) {
+        for(var i = 0; i < lines.length; i++)
+        {
+            var path = lines[i];
+            if(path.beginning <= 0)
+                return;
+
+            path.beginning -= 0.01;
+        }
+    }).play();  
+}
+
 //this generates 2 points, representing a randomly generated line between 2 sides
 //this only returns the ends of the line, so you are free to draw the line however you want
 function randomLineBetweenTwoSides(two)
@@ -47,8 +70,10 @@ function randomLineBetweenTwoSides(two)
         return [coords1[0], coords1[1], coords2[0], coords2[1]];
 }
 
-function renderRandomStraightLines(two)
+function getRandomStraightLines(two)
 {
+    var lines = []
+
     //make multiple lines
     const maxlines = 10;
     const minlines = 5;
@@ -56,12 +81,22 @@ function renderRandomStraightLines(two)
     for(var i = 0; i < randlines; i++)
     {
         var coords = randomLineBetweenTwoSides(two);
-        var line = two.makeLine(coords[0], coords[1], coords[2], coords[3]);
+        lines.push(new Two.Path([new Two.Anchor(coords[0], coords[1]), new Two.Anchor(coords[2], coords[3])]));
     }
+
+    return lines;
 }
 
-function renderRandomCurves(two)
+function renderRandomStraightLines(two)
 {
+    var lines = getRandomStraightLines(two);
+    animateLines(two, lines);
+}
+
+function getRandomCurves(two)
+{
+    var lines = []
+
     const maxlines = 10;
     const minlines = 5;
     const randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
@@ -76,14 +111,25 @@ function renderRandomCurves(two)
         points.forEach(p => p.relative = false);
         //don't ask me what difference "the tricks" make, they just do
         let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
-        two.add(bezierPath);
         bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
         bezierPath.fill = 'none';   
+
+        lines.push(bezierPath);
     }
+
+    return lines;
 }
 
-function renderRandomLinesAndCurves(two)
+function renderRandomCurves(two)
 {
+    var lines = getRandomCurves(two);
+    animateLines(two, lines);
+}
+
+function getRandomLinesAndCurves(two)
+{
+    var lines = []
+
     const maxlines = 10;
     const minlines = 5;
     const randlines = minlines + Math.floor(Math.random()*(maxlines + 1 - minlines));
@@ -102,19 +148,28 @@ function renderRandomLinesAndCurves(two)
             points.forEach(p => p.relative = false);
             //don't ask me what difference "the tricks" make, they just do
             let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
-            two.add(bezierPath);
             bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
             bezierPath.fill = 'none';  
+
+            lines.push(bezierPath);
         } 
         else
-        {
-            var line = two.makeLine(coords[0], coords[1], coords[2], coords[3]);
-        }
+            lines.push(new Two.Path(new Two.Anchor(coords[0], coords[1]), new Two.Anchor(coords[2], coords[3])));
     }
+
+    return lines;
 }
 
-function renderStripes(two)
+function renderRandomLinesAndCurves(two)
 {
+    var lines = getRandomLinesAndCurves(two);
+    animateLines(two, lines);
+}
+
+function getStripes(two)
+{
+    var lines = []
+
     const maxgradient = 10;
     const gradient = -maxgradient + Math.floor(Math.random()*(maxgradient*2 + 1));
 
@@ -127,7 +182,7 @@ function renderStripes(two)
     var n = 0;
     while(n*spacing <= two.height)
     {
-        two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+        lines.push(new Two.Path([new Two.Anchor(0, n*spacing), new Two.Anchor(two.width, (gradient*two.width) + (n*spacing))]));
         n++;
     }
 
@@ -137,7 +192,7 @@ function renderStripes(two)
         n = -1;
         while((gradient*two.width) + (n*spacing) > 0)
         {
-            two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+            lines.push(new Two.Path([new Two.Anchor(0, n*spacing), new Two.Anchor(two.width, (gradient*two.width) + (n*spacing))]));
             n--;
         }
     }
@@ -146,20 +201,38 @@ function renderStripes(two)
         //keep iterating up until the opposite side intersections hit the top
         while((gradient*two.width) + (n*spacing) <= two.width)
         {
-            two.makeLine(0, n*spacing, two.width, (gradient*two.width) + (n*spacing));
+            lines.push(new Two.Path([new Two.Anchor(0, n*spacing, two.width), new Two.Anchor((gradient*two.width) + (n*spacing))]));
             n++;
         }
     }
+
+    return lines;
+}
+
+function renderStripes(two)
+{
+    var lines = getStripes(two);
+    animateLines(two, lines);
+}
+
+function getCrissCross(two)
+{
+    var lines = [];
+    lines.push(getStripes(two));
+    lines.push(getStripes(two));
+    return lines;
 }
 
 function renderCrissCross(two)
 {
-    renderStripes(two);
-    renderStripes(two);
+    var lines = getCrissCross(two);
+    animateLines(two, lines);
 }
 
-function renderCurveStripes(two)
+function getCurveStripes(two)
 {
+    var lines = [];
+
     //determines which way round the curves spawn, horizontal or vertical
     var use_y = Math.random() < 0.5;
     var bound = use_y ? two.height : two.width;
@@ -209,10 +282,19 @@ function renderCurveStripes(two)
         points.forEach(p => p.relative = false);
         //don't ask me what difference "the tricks" make, they just do
         let bezierPath = new Two.Path(points); //I think the trick is specifically using Two.Path rather than two.makePath
-        two.add(bezierPath);
         bezierPath.automatic = false; //changing this is also the trick, without it it doesn't work
-        bezierPath.fill = 'none';  
+        bezierPath.fill = 'none';
+
+        lines.push(bezierPath);
     }
+
+    return lines;
+}
+
+function renderCurveStripes(two)
+{
+    var lines = getCurveStripes(two);
+    animateLines(two, lines);
 }
 
 export default {
@@ -222,5 +304,6 @@ export default {
     renderRandomLinesAndCurves,
     renderStripes, 
     renderCrissCross,
-    renderCurveStripes
+    renderCurveStripes,
+    animateLines
 };
