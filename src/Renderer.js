@@ -154,7 +154,7 @@ function getRandomLinesAndCurves(two)
             lines.push(bezierPath);
         } 
         else
-            lines.push(new Two.Path(new Two.Anchor(coords[0], coords[1]), new Two.Anchor(coords[2], coords[3])));
+            lines.push(new Two.Path([new Two.Anchor(coords[0], coords[1]), new Two.Anchor(coords[2], coords[3])]));
     }
 
     return lines;
