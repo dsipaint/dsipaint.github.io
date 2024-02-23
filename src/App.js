@@ -50,7 +50,7 @@ function App() {
 
     //add the right number of boxes to draw to
     for(var i = 0; i < settings.number; i++)
-      $("#menu").after(ReactDOMServer.renderToStaticMarkup(<div id={"box" + i} class="box"></div>));
+      $("#menu").after(ReactDOMServer.renderToStaticMarkup(<div id={"box" + i} className="box"></div>));
 
     //then draw in each box
     var boxes = document.getElementsByClassName("box");
