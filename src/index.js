@@ -23,14 +23,17 @@ function getLine()
 
 
 var lines = []
+var maxspeed = 0.01;
+var minspeed = 0.005;
 titlerender.bind('update', function(framecount){
-  while(lines.length !== 10)
+  while(lines.length !== 10) //10 lines at any given time
   {
     line = getLine();
     line.stroke = '#' + Math.floor(Math.random()*16777215).toString(16);
     line.linewidth = 3;
     titlerender.add(line);
     line.beginning = 1;
+    line.speed = minspeed + (Math.random()*(maxspeed - minspeed)); //add our own custom speed parameter to each line
     
     lines.push(line);  
   }
@@ -46,7 +49,7 @@ titlerender.bind('update', function(framecount){
       return;
     }
   
-    line.beginning -= 0.01;
+    line.beginning -= line.speed;
   }
 
 }).play();
