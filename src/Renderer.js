@@ -303,5 +303,6 @@ export default {
     renderStripes, 
     renderCrissCross,
     renderCurveStripes,
-    animateLines
+    animateLines,
+    randomLineBetweenTwoSides
 };
