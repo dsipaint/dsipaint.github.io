@@ -199,9 +199,9 @@ function getStripes(two)
     else
     {
         //keep iterating up until the opposite side intersections hit the top
-        while((gradient*two.width) + (n*spacing) <= two.width)
+        while((gradient*two.width) + (n*spacing) <= two.height)
         {
-            lines.push(new Two.Path([new Two.Anchor(0, n*spacing, two.width), new Two.Anchor((gradient*two.width) + (n*spacing))]));
+            lines.push(new Two.Path([new Two.Anchor(0, n*spacing), new Two.Anchor(two.width, (gradient*two.width) + (n*spacing))]));
             n++;
         }
     }
