@@ -218,9 +218,8 @@ function renderStripes(two)
 function getCrissCross(two)
 {
     var lines = [];
-    lines.push(getStripes(two));
-    lines.push(getStripes(two));
-    return lines;
+    return lines.concat(getStripes(two))
+        .concat(getStripes(two));
 }
 
 function renderCrissCross(two)
